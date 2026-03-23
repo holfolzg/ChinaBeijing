@@ -1,0 +1,253 @@
+---
+import rawMenu from '../../menu.json';
+
+type MenuItem = {
+  name: string;
+  prices?: Record<string, number>;
+  price?: number;
+  description?: string;
+  unit?: boolean;
+  image?: string;
+};
+
+type Category = {
+  category: string;
+  items: MenuItem[];
+};
+
+type Menu = {
+  restaurant: string;
+  contact: {
+    phone: string;
+    city: string;
+  };
+  menu: Category[];
+};
+
+const menu = rawMenu as Menu;
+---
+
+<section class="menu">
+
+  <h1 class="menu-title" id="menu">Menú</h1>
+
+  {menu.menu.map((category) => (
+    <details class="category">
+      <summary class="category-title">
+        {category.category}
+      </summary>
+
+      <div class="items">
+        {category.items.map((item) => (
+          <div
+            class="card"
+            style={`background-image: url('${item.image ?? '/images/default-arroz.jpg'}')`}
+          >
+            <div class="content">
+              <h3>{item.name}</h3>
+
+              {item.description && (
+                <p class="description">{item.description}</p>
+              )}
+
+              {item.prices && (
+                <div class="prices">
+                  {Object.entries(item.prices)
+                    .sort((a, b) => Number(b[0]) - Number(a[0]))
+                    .map(([people, price]) => (
+                      <div class="price">
+                        <span>{people} personas</span>
+                        <strong>${price.toLocaleString('es-CO')}</strong>
+                      </div>
+                    ))}
+                </div>
+              )}
+
+              {item.price && (
+                <div class="single-price">
+                  <strong>${item.price.toLocaleString('es-CO')}</strong>
+                  {item.unit && <span> / unidad</span>}
+                </div>
+              )}
+            </div>
+          </div>
+        ))}
+      </div>
+    </details>
+  ))}
+
+</section>
+
+<style>
+  /* Seccion */
+  .menu {
+    padding: 5rem 2rem 2rem;
+    min-height: 100vh;
+    position: relative;
+    background-image: url('/images/fondo.webp');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+  }
+
+  .menu::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.65);
+    z-index: 0;
+  }
+
+  .menu > * {
+    position: relative;
+    z-index: 1;
+  }
+
+  /* Título */
+  .menu-title {
+    text-align: center;
+    font-size: 2.8rem;
+    font-weight: bold;
+    color: #ffcc00;
+    margin-bottom: 2rem;
+  }
+
+  /* Categoría */
+  .category {
+    background: #f8fafc;
+    border-radius: 16px;
+    margin-bottom: 1rem;
+    overflow: hidden;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.45);
+  }
+
+  .category-title {
+    cursor: pointer;
+    list-style: none;
+    padding: 1rem;
+    font-weight: bold;
+    font-size: 1.2rem;
+    background: #c09a03;
+    color: #f4f2df;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .category-title::-webkit-details-marker {
+    display: none;
+  }
+
+  .category-title::after {
+    content: "➕";
+    font-size: 1rem;
+    transition: transform 0.2s ease;
+  }
+
+  details[open] .category-title::after {
+    content: "➖";
+  }
+
+  /* Items */
+  .items {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 1.2rem;
+    padding: 1rem;
+    animation: fadeIn 0.3s ease;
+  }
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(-5px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  /* Card */
+  .card {
+    border-radius: 16px;
+    overflow: hidden;
+    position: relative;
+    min-height: 180px;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+    transition: transform 0.25s ease;
+  }
+
+  .card:hover {
+    transform: translateY(-6px) scale(1.01);
+  }
+
+  .card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.55);
+    z-index: 0;
+  }
+
+  /* Contenido card */
+  .content {
+    position: relative;
+    z-index: 1;
+    padding: 1.2rem;
+  }
+
+  .content h3 {
+    margin-bottom: 0.3rem;
+    color: #f4f4f4;
+    font-size: 1.1rem;
+    font-weight: 600;
+  }
+
+  .description {
+    font-size: 0.85rem;
+    color: #cbd5e1;
+    margin-bottom: 0.6rem;
+  }
+
+  /* Precios */
+  .prices {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+  }
+
+  .price {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.9rem;
+    padding: 2px 0;
+    border-bottom: 1px dashed rgba(255, 255, 255, 0.8);
+  }
+
+  .price span {
+    color: #94a3b8;
+  }
+
+  .price strong {
+    color: #ffcc00;
+  }
+
+  .single-price {
+    margin-top: 0.5rem;
+    font-size: 1.1rem;
+    color: #ffcc00;
+    font-weight: bold;
+  }
+
+  /* Responsive */
+  @media (max-width: 600px) {
+    .menu-title {
+      font-size: 2.2rem;
+    }
+  }
+</style>

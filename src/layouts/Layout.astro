@@ -1,0 +1,179 @@
+---
+interface Props {
+  title?: string;
+  description?: string;
+}
+
+const {
+  title = "China Beijing | Arroz Chino Auténtico en Cali",
+  description = "El mejor arroz chino de Cali. Sabor tradicional, porciones generosas en China Beijing, barrio Vallado."
+} = Astro.props;
+
+import NavBar from '../components/NavBar.astro';
+import WhatsApp from '../components/Whatsapp.astro';
+---
+
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content={description} />
+    <meta name="generator" content={Astro.generator} />
+    <link rel="icon" type="image/jpeg" href="/images/logorestaurante.jpeg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&family=Playfair+Display:wght@700&display=swap"
+      rel="stylesheet"
+    />
+
+    <title>{title}</title>
+  </head>
+  <body>
+    <NavBar />
+    <main>
+      <slot />
+    </main>
+    <WhatsApp />
+  </body>
+</html>
+
+<style is:global>
+
+  :root {
+    --color-bg:           #0b0101;
+    --color-surface:      #1a1a1a;
+    --color-accent:       #ffcc00;
+    --color-accent-dark:  #c09a03;
+    --color-accent-hover: #f0bb00;
+    --color-text:         #ffffff;
+    --color-text-muted:   #94a3b8;
+    --color-text-soft:    #cbd5e1;
+    --color-border:       rgba(255, 255, 255, 0.08);
+    --color-gold-border:  rgba(255, 204, 0, 0.2);
+
+    /* Tipografía */
+    --font-body:    'Outfit', sans-serif;
+    --font-heading: 'Playfair Display', serif;
+
+    /* Espaciado */
+    --container-max:   1100px;
+    --section-padding: 2rem;
+
+    /* Bordes */
+    --radius-sm:  8px;
+    --radius-md:  12px;
+    --radius-lg:  16px;
+
+    /* Overlay del fondo */
+    --overlay-dark:   rgba(0, 0, 0, 0.75);
+    --overlay-medium: rgba(0, 0, 0, 0.65);
+    --overlay-card:   rgba(0, 0, 0, 0.55);
+
+    /* Z-index */
+    --z-base:      1;
+    --z-navbar:    100;
+    --z-floating:  999;
+  }
+
+  /* RESET */
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+
+  html {
+    scroll-behavior: smooth;
+    overflow-x: hidden;
+  }
+
+  body {
+    font-family: var(--font-body);
+    background-color: var(--color-surface);
+    color: var(--color-text);
+    line-height: 1.6;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  h1, h2, h3, h4 {
+    font-family: var(--font-heading);
+    color: var(--color-accent);
+    line-height: 1.2;
+  }
+
+  p {
+    line-height: 1.7;
+  }
+
+  img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+  }
+
+  a {
+    text-decoration: none;
+    color: inherit;
+    transition: color 0.2s ease;
+  }
+
+  ul, ol {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .container {
+    max-width: var(--container-max);
+    width: 100%;
+    margin: 0 auto;
+    padding: 0 var(--section-padding);
+  }
+
+  .section-bg {
+    position: relative;
+    background-image: url('/images/fondo.jpeg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+  }
+
+  .section-bg::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: var(--overlay-dark);
+    z-index: 0;
+  }
+
+  .section-bg > * {
+    position: relative;
+    z-index: var(--z-base);
+  }
+
+  .btn-primary {
+    display: inline-block;
+    background: var(--color-accent);
+    color: var(--color-bg);
+    padding: 0.65rem 1.5rem;
+    font-family: var(--font-body);
+    font-size: 1rem;
+    font-weight: 700;
+    border-radius: var(--radius-sm);
+    border: none;
+    cursor: pointer;
+    text-decoration: none;
+    transition: background 0.2s ease, transform 0.2s ease;
+  }
+
+  .btn-primary:hover {
+    background: var(--color-accent-hover);
+    transform: scale(1.03);
+  }
+</style>
